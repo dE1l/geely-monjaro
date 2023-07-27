@@ -29,6 +29,7 @@ echo 5. Carbit хак (отключение на телефоне запроса
 echo 6. Отключение проверки доступности интернет соединения (отключение Captive Portal)
 echo 7. Включение проверки доступности интернет соединения (Captive Portal через серверы Яндекс)
 echo 8. ADB хак accessibility_services (запускать после установки и настройки программ, требующих accessibility_services)
+echo 9. Установка Галереи и Обоев
 echo 0. Выход
 echo -------------------------------------------------
 set "opt=x"
@@ -42,6 +43,7 @@ if %opt%==5 goto CarbitHack
 if %opt%==6 goto CaptivNull
 if %opt%==7 goto CaptivYandex
 if %opt%==8 goto MacrodroidAccess
+if %opt%==9 goto Gallery
 if %opt%==0 goto processHalt
 echo.
 echo.
@@ -123,7 +125,9 @@ goto menu
 echo.
 echo Устанавливаю хак accessibility_services...
 
-adb shell settings put secure enabled_accessibility_services com.ecarx.systemui.plugin/com.ecarx.systemui.plugin.navigationbar.AppWatcherService:ecarx.xsf.gestureservice/ecarx.xsf.gestureservice.appservice.AppWatcherService:com.ecarx.xiaoka/com.ecarx.xiaoka.service.XKAppWatcherService:ecarx.xsf.mediacenter/ecarx.xsf.mediacenter.media.MediaWindowStateService:ecarx.launcher3/ecarx.multiwindow.data.monitor.AppWatcherService:com.ecarx.xcmascot/com.ecarx.mascot.service.XCAppWatcherService:com.arlosoft.macrodroid/com.arlosoft.macrodroid.action.services.UIInteractionAccessibilityService:com.arlosoft.macrodroid/.action.services.UIInteractionAccessibilityService:com.arlosoft.macrodroid/.triggers.services.VolumeButtonAccessibilityService:com.arlosoft.macrodroid/.triggers.services.FingerprintAccessibilityService:com.github.ericytsang.multiwindow.app.android/com.github.ericytsang.multiwindow.app.android.service.AppService:com.farmerbb.taskbar/com.farmerbb.taskbar.service.PowerMenuService:com.ajv.multiwindow/com.ajv.multiwindow.Services.AccessibilityService
+adb shell settings put secure enabled_accessibility_services com.ecarx.systemui.plugin/com.ecarx.systemui.plugin.navigationbar.AppWatcherService:ecarx.xsf.gestureservice/ecarx.xsf.gestureservice.appservice.AppWatcherService:com.ecarx.xiaoka/com.ecarx.xiaoka.service.XKAppWatcherService:ecarx.xsf.mediacenter/ecarx.xsf.mediacenter.media.MediaWindowStateService:ecarx.launcher3/ecarx.multiwindow.data.monitor.AppWatcherService:com.ecarx.xcmascot/com.ecarx.mascot.service.XCAppWatcherService:com.arlosoft.macrodroid/com.arlosoft.macrodroid.action.services.UIInteractionAccessibilityService:com.arlosoft.macrodroid/.action.services.UIInteractionAccessibilityService:com.arlosoft.macrodroid/.triggers.services.VolumeButtonAccessibilityService:com.arlosoft.macrodroid/.triggers.services.FingerprintAccessibilityService:com.github.ericytsang.multiwindow.app.android/com.github.ericytsang.multiwindow.app.android.service.AppService:com.farmerbb.taskbar/com.farmerbb.taskbar.service.PowerMenuService:com.ajv.multiwindow/com.ajv.multiwindow.Services.AccessibilityService:nu.nav.bar/nu.nav.bar.service.NavigationBarService:ace.jun.simplecontrol/ace.jun.simplecontrol.service.AccService:com.ivianuu.oneplusgestures/com.ivianuu.vivid.accessibility.VividAccessibilityService
+
+adb shell pm grant com.ivianuu.immersivemodemanager android.permission.WRITE_SECURE_SETTINGS
 
 echo.
 echo Поздравляю, хак установлен.
@@ -176,6 +180,28 @@ adb shell settings put global captive_portal_other_fallback_urls http://www.goog
 
 echo.
 echo Перезагрузите головное устройство.
+goto menu
+
+:Gallery
+if not EXIST "%defaultLocation%\FotoGallery\*.apk" ( 
+echo.
+echo Папка не содержит приложений.
+goto changeLocation
+)
+echo Устанавливаю Галерею...
+echo.
+for /f "delims=|" %%i in ('dir /b "%defaultLocation%\FotoGallery\*.apk"') do (
+    echo -------------------------
+	echo Установка %%~ni
+	adb install -r "%defaultLocation%\FotoGallery\%%i"
+)
+echo.
+echo.
+echo Устанавливаю Обои...
+adb push WallpaperBloody /storage/emulated/0
+echo.
+echo.
+echo Поздравляю, Галерея и Обои установлены.
 goto menu
 
 :processHalt
