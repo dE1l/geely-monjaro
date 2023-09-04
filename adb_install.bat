@@ -131,8 +131,10 @@ echo Устанавливаю хак...
 	adb shell pm grant com.arlosoft.macrodroid android.permission.SET_VOLUME_KEY_LONG_PRESS_LISTENER
 	adb shell pm grant com.arlosoft.macrodroid android.permission.DUMP
 	adb shell pm grant com.arlosoft.macrodroid.helper android.permission.WRITE_SECURE_SETTINGS	
-	
-adb shell settings put secure enabled_accessibility_services com.arlosoft.macrodroid/com.arlosoft.macrodroid.triggers.services.MacroDroidAccessibilityServiceJellyBean:com.arlosoft.macrodroid/com.arlosoft.macrodroid.triggers.services.VolumeButtonAccessibilityService:com.arlosoft.macrodroid/com.arlosoft.macrodroid.action.services.UIInteractionAccessibilityService:com.arlosoft.macrodroid/com.arlosoft.macrodroid.triggers.services.FingerprintAccessibilityService
+
+	for /F "delims=" %%i IN ('adb shell settings list secure ^| findstr /c:"enabled_access"') DO set access=%%i
+	SET "result=%access:~31%:com.arlosoft.macrodroid/com.arlosoft.macrodroid.triggers.services.MacroDroidAccessibilityServiceJellyBean:com.arlosoft.macrodroid/com.arlosoft.macrodroid.triggers.services.VolumeButtonAccessibilityService:com.arlosoft.macrodroid/com.arlosoft.macrodroid.action.services.UIInteractionAccessibilityService:com.arlosoft.macrodroid/com.arlosoft.macrodroid.triggers.services.FingerprintAccessibilityService"
+	adb shell settings put secure enabled_accessibility_services %result%
 	
 echo.
 echo Поздравляю, хак установлен.
@@ -144,9 +146,11 @@ goto menu
 echo.
 echo Устанавливаю хак accessibility_services...
 
-adb shell settings put secure enabled_accessibility_services com.ecarx.systemui.plugin/com.ecarx.systemui.plugin.navigationbar.AppWatcherService:ecarx.xsf.gestureservice/ecarx.xsf.gestureservice.appservice.AppWatcherService:com.ecarx.xiaoka/com.ecarx.xiaoka.service.XKAppWatcherService:ecarx.xsf.mediacenter/ecarx.xsf.mediacenter.media.MediaWindowStateService:ecarx.launcher3/ecarx.multiwindow.data.monitor.AppWatcherService:com.ecarx.xcmascot/com.ecarx.mascot.service.XCAppWatcherService:com.arlosoft.macrodroid/com.arlosoft.macrodroid.action.services.UIInteractionAccessibilityService:com.arlosoft.macrodroid/.action.services.UIInteractionAccessibilityService:com.arlosoft.macrodroid/.triggers.services.VolumeButtonAccessibilityService:com.arlosoft.macrodroid/.triggers.services.FingerprintAccessibilityService:com.github.ericytsang.multiwindow.app.android/com.github.ericytsang.multiwindow.app.android.service.AppService:com.farmerbb.taskbar/com.farmerbb.taskbar.service.PowerMenuService:com.ajv.multiwindow/com.ajv.multiwindow.Services.AccessibilityService:nu.nav.bar/nu.nav.bar.service.NavigationBarService:ace.jun.simplecontrol/ace.jun.simplecontrol.service.AccService:com.ivianuu.oneplusgestures/com.ivianuu.vivid.accessibility.VividAccessibilityService
+	for /F "delims=" %%i IN ('adb shell settings list secure ^| findstr /c:"enabled_access"') DO set access=%%i
+	SET "result=%access:~31%:com.github.ericytsang.multiwindow.app.android/com.github.ericytsang.multiwindow.app.android.service.AppService:com.farmerbb.taskbar/com.farmerbb.taskbar.service.PowerMenuService:com.ajv.multiwindow/com.ajv.multiwindow.Services.AccessibilityService:nu.nav.bar/nu.nav.bar.service.NavigationBarService:ace.jun.simplecontrol/ace.jun.simplecontrol.service.AccService:com.ivianuu.oneplusgestures/com.ivianuu.vivid.accessibility.VividAccessibilityService"
+	adb shell settings put secure enabled_accessibility_services %result%
 
-adb shell pm grant com.ivianuu.immersivemodemanager android.permission.WRITE_SECURE_SETTINGS
+	adb shell pm grant com.ivianuu.immersivemodemanager android.permission.WRITE_SECURE_SETTINGS
 
 echo.
 echo Поздравляю, хак установлен.
@@ -276,7 +280,9 @@ for /f "delims=|" %%i in ('dir /b "%defaultLocation%\GNSS\*.apk"') do (
 
 adb shell appops set org.broeuschmeul.android.gps.usb.provider android:mock_location allow
 
-adb shell settings put secure enabled_accessibility_services org.broeuschmeul.android.gps.usb.provider/org.broeuschmeul.android.gps.usb.provider.service.BootService
+	for /F "delims=" %%i IN ('adb shell settings list secure ^| findstr /c:"enabled_access"') DO set access=%%i
+	SET "result=%access:~31%:org.broeuschmeul.android.gps.usb.provider/org.broeuschmeul.android.gps.usb.provider.service.BootService"
+	adb shell settings put secure enabled_accessibility_services %result%
 
 echo.
 echo.
